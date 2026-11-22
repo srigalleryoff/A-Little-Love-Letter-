@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#3a071d"><title>A Little Message For You | Sri Gallery</title>
+<style>
+:root{--wine:#5d0828;--rose:#f8cbd7;--gold:#f5cf79;--cream:#fff8f4;--ink:#641b37}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Georgia,'Times New Roman',serif;color:var(--cream);background:radial-gradient(circle at 15% 15%,#a83b5e 0,transparent 30%),radial-gradient(circle at 85% 20%,#7c153d 0,transparent 28%),linear-gradient(145deg,#270515,#650d32 55%,#310719);overflow-x:hidden}
+.wrap{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:28px 16px 40px;position:relative}
+.glow{position:fixed;width:220px;height:220px;border-radius:50%;background:#ffb1c7;filter:blur(100px);opacity:.16;pointer-events:none}
+.g1{top:5%;left:-80px}.g2{bottom:0;right:-70px}
+.card{width:min(100%,540px);text-align:center;padding:34px 24px 28px;border:1px solid rgba(255,220,174,.55);border-radius:28px;background:linear-gradient(160deg,rgba(255,239,235,.13),rgba(55,4,25,.48));box-shadow:0 24px 70px #16000d88;position:relative}
+.brand{font-family:cursive;font-size:27px;color:#fff1f3;letter-spacing:.5px}
+.brand span,.heart{color:#ffb2c9}
+.eyebrow{margin:20px 0 8px;text-transform:uppercase;letter-spacing:4px;font:11px Arial,sans-serif;color:var(--gold)}
+h1{font-size:clamp(32px,8vw,48px);font-weight:normal;line-height:1.08;margin:0;color:#ffe7c1}
+.to{font-size:18px;color:#ffd4df;margin:14px 0 24px;position:relative;z-index:5}
+
+/* Envelope: space is reserved above it when opened, so the flap never covers the text */
+.envelope{width:176px;height:118px;margin:0 auto 18px;position:relative;cursor:pointer;filter:drop-shadow(0 12px 16px #19000b88);transition:margin-top .7s ease,transform .25s}
+.envelope:hover{transform:translateY(-4px)}
+.opened .envelope{margin-top:64px}
+.env-body{position:absolute;inset:20px 0 0;background:linear-gradient(135deg,#f8b6c8,#d95b83);border-radius:8px 8px 14px 14px;overflow:hidden}
+.env-body:before{content:'';position:absolute;inset:0;background:linear-gradient(140deg,transparent 49%,#fbd5df 50%) left/50% 100% no-repeat,linear-gradient(220deg,transparent 49%,#f5c2d0 50%) right/50% 100% no-repeat}
+.flap{position:absolute;top:20px;left:0;width:0;height:0;border-left:88px solid transparent;border-right:88px solid transparent;border-top:68px solid #ffdae3;transform-origin:top;transition:transform .7s;z-index:3}
+.seal{position:absolute;z-index:4;left:50%;top:62px;transform:translateX(-50%);font-size:27px;color:#9b1745;transition:opacity .3s}
+.opened .flap{transform:rotateX(180deg);z-index:1}
+.opened .seal{opacity:0}
+.hint{font:12px Arial,sans-serif;color:#f7cbd6;margin:8px 0 18px}
+
+/* Letter: grows to its exact content height, so nothing can get cut off */
+.letter-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .9s ease;filter:drop-shadow(0 12px 22px #1b001066);scroll-margin-top:14px}
+.opened .letter-wrap{grid-template-rows:1fr}
+.letter{min-height:0;overflow:hidden}
+.letter-card{background:var(--cream);color:var(--ink);border-radius:18px;padding:24px 22px;margin-top:18px;opacity:0;transform:translateY(14px);transition:opacity .6s .2s,transform .6s .2s}
+.opened .letter-card{opacity:1;transform:none}
+.letter-card h2{font-weight:normal;font-size:27px;margin:0 0 15px;color:#8b1742}
+.photo-caption{font:10px Arial,sans-serif;letter-spacing:1.5px;color:#a45a75;text-transform:uppercase;margin:12px 0 14px}
+.letter-card p{font-size:16px;line-height:1.8;margin:12px 0}
+.letter-card .sign{font-style:italic;color:#a42b55;margin-top:20px}
+.music-note,#musicStatus{font:11px Arial,sans-serif;color:#92506a}
+.music-note{margin-top:12px}#musicStatus{margin-top:10px}
+audio{display:none}
+.footer{margin-top:24px;font:11px Arial,sans-serif;letter-spacing:2px;color:#f7cbd6}
+.replay{display:none;margin:16px auto 0;border:1px solid #f5c6d2;background:transparent;color:#ffe8ef;padding:10px 18px;border-radius:30px;font:13px Arial,sans-serif;cursor:pointer}
+.opened .replay{display:inline-block}
+.hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.float{position:absolute;bottom:-30px;color:#ffc2d3;animation:rise 8s linear infinite;opacity:.55}
+@keyframes rise{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+@media(max-width:380px){.card{padding:28px 17px}.letter-card{padding:20px 16px}}
+@media(prefers-reduced-motion:reduce){.float{animation:none}.letter-wrap,.envelope,.flap,.letter-card{transition:none}}
+.memories{display:flex;gap:8px;justify-content:center;align-items:flex-start;margin:6px 0 8px}
+.polaroid{margin:0;width:31%;background:#fff;padding:5px 5px 7px;border-radius:6px;box-shadow:0 6px 14px #8b174238;cursor:zoom-in;transition:transform .25s}
+.polaroid:nth-child(1){transform:rotate(-3deg)}.polaroid:nth-child(2){transform:rotate(2deg) translateY(5px)}.polaroid:nth-child(3){transform:rotate(-1.5deg)}
+.polaroid:active{transform:scale(1.04)}
+.polaroid img{display:block;width:100%;aspect-ratio:4/5;height:auto;object-fit:cover;object-position:50% 18%;border-radius:3px;background:#f3dfe5}
+.polaroid figcaption{font:9px Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#a45a75;text-align:center;margin-top:5px}
+.lightbox{position:fixed;inset:0;z-index:100;background:rgba(25,0,12,.9);display:none;align-items:center;justify-content:center;padding:20px;cursor:zoom-out}
+.lightbox.show{display:flex}
+.lightbox img{max-width:92vw;max-height:86vh;object-fit:contain;border-radius:12px;border:4px solid #f4d5df;background:#fff}
+</style></head>
+<body><div class="glow g1"></div><div class="glow g2"></div><div class="hearts" id="hearts"></div>
+<main class="wrap"><section class="card" id="card">
+<div class="brand">Sri Gallery <span>♡</span></div>
+<div class="eyebrow">A little something from the heart</div>
+<h1>Just for You</h1>
+<div class="to">To my favourite person <span class="heart">♥</span></div>
+
+<div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open your message" aria-expanded="false"><div class="env-body"></div><div class="flap"></div><div class="seal">♥</div></div>
+<div class="hint" id="hint">Tap the envelope to open your surprise</div>
+
+<div class="letter-wrap" id="letterWrap"><div class="letter" id="letter"><div class="letter-card">
+<h2>Dear Akil,</h2>
+<div class="memories">
+<figure class="polaroid"><img src="assets/couple.webp" alt="Akil and Zara together" width="1024" height="1536" loading="lazy"><figcaption>Together</figcaption></figure>
+<figure class="polaroid"><img src="assets/groom-card.webp" alt="Akil" width="800" height="1000" loading="lazy"><figcaption>Akil</figcaption></figure>
+<figure class="polaroid"><img src="assets/bride-card.webp" alt="Zara" width="800" height="1000" loading="lazy"><figcaption>Zara</figcaption></figure>
+</div>
+<div class="photo-caption">Little memories · Akil &amp; Zara · tap a photo to view</div>
+<p>If I could choose one beautiful thing to keep in every tomorrow, it would be you. You make the ordinary feel magical, the quiet moments feel complete, and even the busiest days feel a little softer.</p>
+<p>I may not say it perfectly every day, but please never doubt this: you are thought of, appreciated, and loved more than these few words can ever explain. Thank you for being my favourite hello, my safest place, and the smile I look forward to.</p>
+<p>And whenever this song plays, I hope it reminds you that somewhere, someone is smiling because you are in their life.</p>
+<p class="sign">Always yours,<br>Zara <span class="heart">♥</span></p>
+<div class="music-note">♫ Our song: Munbe Vaa · Sillunu Oru Kaadhal</div>
+<audio id="song" preload="auto" src="assets/love-song.mp3"></audio>
+<div id="musicStatus">♫ Munbe Vaa · Music starts when you open the letter</div>
+</div></div></div>
+
+<button class="replay" id="replay" type="button">Close &amp; replay</button>
+<div class="footer">MADE WITH LOVE · SRI GALLERY</div>
+</section></main>
+<div class="lightbox" id="lightbox"><img id="lightboxImg" alt=""></div>
+<script>
+const card=document.getElementById('card'),env=document.getElementById('envelope'),hint=document.getElementById('hint'),replay=document.getElementById('replay'),song=document.getElementById('song'),musicStatus=document.getElementById('musicStatus'),letterWrap=document.getElementById('letterWrap');
+function startSong(){song.currentTime=0;song.play().then(()=>{musicStatus.textContent='♫ Now playing: Munbe Vaa'}).catch(()=>{musicStatus.textContent='♫ Tap the envelope once more if music does not start'})}
+function stopSong(){song.pause();song.currentTime=0;musicStatus.textContent='♫ Munbe Vaa · Music starts when you open the letter'}
+function toggle(){
+  card.classList.toggle('opened');
+  const opened=card.classList.contains('opened');
+  env.setAttribute('aria-expanded',opened);
+  hint.textContent=opened?'A message made just for you':'Tap the envelope to open your surprise';
+  if(opened){startSong();setTimeout(()=>letterWrap.scrollIntoView({behavior:'smooth',block:'start'}),500)}
+  else{stopSong();window.scrollTo({top:0,behavior:'smooth'})}
+}
+env.addEventListener('click',toggle);
+env.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});
+replay.addEventListener('click',toggle);
+const hearts=document.getElementById('hearts');
+for(let i=0;i<14;i++){const h=document.createElement('span');h.className='float';h.textContent='♥';h.style.left=(Math.random()*100)+'%';h.style.animationDelay=(Math.random()*8)+'s';h.style.fontSize=(12+Math.random()*18)+'px';hearts.appendChild(h)}
+const lb=document.getElementById('lightbox'),lbImg=document.getElementById('lightboxImg');
+document.querySelectorAll('.polaroid img').forEach(i=>i.addEventListener('click',()=>{lbImg.src=i.src;lbImg.alt=i.alt;lb.classList.add('show')}));
+lb.addEventListener('click',()=>lb.classList.remove('show'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('show')});
+</script></body></html>
